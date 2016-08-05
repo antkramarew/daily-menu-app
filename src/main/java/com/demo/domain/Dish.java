@@ -14,6 +14,8 @@ public class Dish extends MenuComponent {
     @OneToMany(fetch = FetchType.EAGER)
     private List<ProductItem> ingredients = new ArrayList<>();
 
+    private int amount;
+
     @Override
     public void add(MenuComponent component) {
         ingredients.add((ProductItem) component);
