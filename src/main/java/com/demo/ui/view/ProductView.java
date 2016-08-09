@@ -7,6 +7,7 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.HorizontalLayout;
@@ -21,13 +22,13 @@ import org.vaadin.viritin.fields.MTable;
 import org.vaadin.viritin.fields.MTextField;
 import org.vaadin.viritin.layouts.MCssLayout;
 
+import javax.annotation.PostConstruct;
 import java.util.Collection;
 
 /**
  * Created by toxa on 8/9/2016.
  */
 @SpringComponent
-@ViewScope
 public class ProductView extends VerticalLayout implements MyView {
 
     @Autowired
@@ -82,14 +83,15 @@ public class ProductView extends VerticalLayout implements MyView {
             applyButtonStates();
         });
         toolbar.setSpacing(true);
+    }
 
+
+    @PostConstruct
+    public void init() {
         productForm.setChangeHandler(() -> {
             listProducts(null);
         });
-        listProducts(null);
-
     }
-
     public void listProducts(String text) {
         if (StringUtils.isEmpty(text)) {
             table.setBeans((Collection) productRepository.findAll());
@@ -108,7 +110,7 @@ public class ProductView extends VerticalLayout implements MyView {
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-
+        listProducts(null);
     }
 
     public String getName() {

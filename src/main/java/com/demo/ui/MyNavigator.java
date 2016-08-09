@@ -12,15 +12,13 @@ import java.util.List;
 /**
  * Created by toxa on 8/9/2016.
  */
-@SpringComponent
 public class MyNavigator extends Navigator {
 
-    @Autowired
     private List<MyView> views;
 
-    @Autowired
-    public MyNavigator(ViewContainer container) {
+    public MyNavigator(List<MyView> views, ViewContainer container) {
         super(UI.getCurrent(), container);
+        this.views = views;
         initProviders();
     }
 

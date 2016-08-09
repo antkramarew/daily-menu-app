@@ -25,7 +25,6 @@ import javax.annotation.PostConstruct;
  * Created by anton_kramarev on 8/4/2016.
  */
 @SpringComponent
-@UIScope
 public class ProductForm extends AbstractForm<Product> {
 
     @Autowired

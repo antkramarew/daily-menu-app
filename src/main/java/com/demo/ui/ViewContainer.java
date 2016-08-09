@@ -10,6 +10,7 @@ import org.vaadin.viritin.layouts.MCssLayout;
 public class ViewContainer extends MCssLayout {
 
     public ViewContainer() {
+        addStyleName("view-content");
         setSizeFull();
     }
 }
