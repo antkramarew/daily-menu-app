@@ -5,6 +5,7 @@ import com.demo.repository.ProductRepository;
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
@@ -13,6 +14,7 @@ import org.springframework.util.StringUtils;
 import org.vaadin.viritin.button.ConfirmButton;
 import org.vaadin.viritin.button.MButton;
 import org.vaadin.viritin.fields.MTable;
+import org.vaadin.viritin.fields.MTextField;
 import org.vaadin.viritin.layouts.MCssLayout;
 
 import java.util.Collection;
@@ -40,9 +42,11 @@ public class VaadinUI extends UI {
                 productForm.openInModalPopup();
             });
 
-    private final MButton delete = new ConfirmButton(FontAwesome.TRASH_O,"Are you sure?",
+    private final ConfirmButton delete = new ConfirmButton(FontAwesome.TRASH_O,"Are you sure?",
             event -> {
                 productRepository.delete(table.getValue().getId());
+                table.setSelected(null);
+                listProducts(null);
             });
 
     private final MButton edit = new MButton(FontAwesome.PENCIL_SQUARE_O,
@@ -54,23 +58,21 @@ public class VaadinUI extends UI {
     private final MCssLayout actions = new MCssLayout(add, edit, delete)
             .withStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
 
-    private final TextField filter;
-
-
-    public VaadinUI() {
-        this.filter = new TextField();
-    }
-
-
+    private final MTextField filter = new MTextField()
+            .withInputPrompt("Filter by name")
+            .withTextChangeListener(e -> {
+                table.setSelected(null);
+                listProducts(e.getText());
+            });
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
-
-
         HorizontalLayout toolbar = new HorizontalLayout(filter, actions);
         VerticalLayout productsLayout = new VerticalLayout(toolbar, table);
-        table.setBeans((Collection<Product>) productRepository.findAll());
         table.setSelectable(true);
+        table.addMValueChangeListener(e -> {
+            applyButtonStates();
+        });
         toolbar.setSpacing(true);
         productsLayout.setMargin(true);
         productsLayout.setSpacing(true);
@@ -78,18 +80,13 @@ public class VaadinUI extends UI {
         tabSheet.setSizeFull();
         tabSheet.addTab(productsLayout, "Products");
         setContent(tabSheet);
-
-        filter.setInputPrompt("Filter by name");
-        filter.addTextChangeListener(e -> listProducts(e.getText()));
-
         productForm.setChangeHandler(() -> {
-            productForm.setVisible(false);
-            listProducts(filter.getValue());
+            listProducts(null);
         });
         listProducts(null);
     }
 
-    private void listProducts(String text) {
+    public void listProducts(String text) {
         if (StringUtils.isEmpty(text)) {
             table.setBeans((Collection) productRepository.findAll());
         }

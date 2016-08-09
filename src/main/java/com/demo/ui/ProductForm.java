@@ -19,6 +19,8 @@ import org.vaadin.viritin.layouts.MCssLayout;
 import org.vaadin.viritin.layouts.MFormLayout;
 import org.vaadin.viritin.layouts.MVerticalLayout;
 
+import javax.annotation.PostConstruct;
+
 /**
  * Created by anton_kramarev on 8/4/2016.
  */
@@ -80,4 +82,10 @@ public class ProductForm extends AbstractForm<Product> {
     public void setChangeHandler(ChangeHandler h) {
         save.addClickListener(e -> h.onChange());
     }
+
+    @PostConstruct
+    public void log() {
+        System.out.println("ProductForm created");
+    }
+
 }
