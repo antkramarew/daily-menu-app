@@ -28,9 +28,11 @@ import java.util.Collection;
 /**
  * Created by toxa on 8/9/2016.
  */
-@SpringComponent
-public class ProductView extends VerticalLayout implements MyView {
 
+@SpringView(name = ProductView.VIEW_NAME)
+public class ProductView extends VerticalLayout implements View {
+
+    public static final String VIEW_NAME = "product-view";
     @Autowired
     private ProductRepository productRepository;
     @Autowired

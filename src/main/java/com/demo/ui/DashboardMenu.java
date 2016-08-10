@@ -1,10 +1,9 @@
 package com.demo.ui;
 
-import com.demo.ui.view.MyView;
+import com.demo.ui.view.ViewType;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.spring.annotation.SpringComponent;
-import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +14,10 @@ import java.util.List;
 /**
  * Created by anton_kramarev on 8/9/2016.
  */
-@SpringComponent
+
 public class DashboardMenu extends CustomComponent {
     public static final String ID = "dashboard-menu";
     private static final String STYLE_VISIBLE = "valo-menu-visible";
-
-
-    @Autowired
-    private List<MyView> views;
 
     public DashboardMenu() {
         setPrimaryStyleName("valo-menu");
@@ -83,8 +78,8 @@ public class DashboardMenu extends CustomComponent {
         CssLayout menuItemsLayout = new CssLayout();
         menuItemsLayout.addStyleName("valo-menuitems");
 
-        for (final MyView view : views) {
-            Component menuItemComponent = new ValoMenuItemButton(view);
+        for (ViewType view : ViewType.values()) {
+            Component menuItemComponent = new ValoMenuItemButton(view.getViewName());
 
             menuItemsLayout.addComponent(menuItemComponent);
         }
@@ -100,16 +95,13 @@ public class DashboardMenu extends CustomComponent {
 
     public final class ValoMenuItemButton extends Button {
 
-        private static final String STYLE_SELECTED = "selected";
 
-        private final MyView view;
 
-        public ValoMenuItemButton(final MyView view) {
-            this.view = view;
+        public ValoMenuItemButton(String viewName) {
             setPrimaryStyleName("valo-menu-item");
-            setCaption(view.getName());
+            setCaption(viewName);
             addClickListener(event -> UI.getCurrent().getNavigator()
-                    .navigateTo(view.getName()));
+                    .navigateTo(viewName));
 
         }
 

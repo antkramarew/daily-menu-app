@@ -22,8 +22,6 @@ import java.util.Collection;
 /**
  * Created by anton_kramarev on 8/4/2016.
  */
-@Theme("valo")
-@SpringUI
 public class VaadinUI extends UI {
 
     @Autowired
